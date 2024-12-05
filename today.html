@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>This is an Interactive Webpage</h1>
+
+    <!-- Button to toggle background color -->
+    <button id="toggle-color">Toggle Background Color</button>
+
+    <!-- Slider to adjust text size -->
+    <div style="margin-top: 20px;">
+        <label for="text-slider">Adjust Text Size:</label>
+        <input type="range" id="text-slider" min="14" max="32" value="16">
+        <p id="text" style="font-size: 16px;">This is a resizable paragraph.</p>
+    </div>
+
+    <!-- Modal Section -->
+    <button id="open-modal">Open Modal</button>
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal" id="modal">
+        <p>This is a modal!</p>
+        <button id="close-modal">Close</button>
+    </div>
+
+    <!-- Form with validation -->
+    <form id="user-form" style="margin-top: 20px;">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            <span class="error" id="name-error"></span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <span class="error" id="email-error"></span>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <span class="error" id="password-error"></span>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Dropdown Menu -->
+    <div style="margin-top: 20px;">
+        <label for="dropdown">Choose an option:</label>
+        <select id="dropdown">
+            <option value="">Select...</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+            <option value="option3">Option 3</option>
+        </select>
+        <p id="dropdown-message"></p>
+    </div>
+
+    <script>
+        // Toggle Background Color
+        const toggleButton = document.getElementById('toggle-color');
+        let isLight = true;
+        toggleButton.addEventListener('click', () => {
+            document.body.style.backgroundColor = isLight ? '#333' : '#fff';
+            document.body.style.color = isLight ?'fff' : '#000';
+            isLight = !isLight;
+        });
+
+        // Slider to adjust text size
+        const textSlider = document.getElementById('text-slider');
+        const textParagraph = document.getElementById('text');
+        textSlider.addEventListener('input', (event) => {
+            textParagraph.style.fontSize = `${event.target.value}px`;
+        });
+
+        // Modal
+        const openModalButton = document.getElementById('open-modal');
+        const closeModalButton = document.getElementById('close-modal');
+        const modal = document.getElementById('modal');
+        const modalOverlay = document.getElementById('modal-overlay');
+
+        openModalButton.addEventListener('click', () => {
+            modal.style.display = 'block';
+            modalOverlay.style.display = 'block';
+        });
+
+        closeModalButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        modalOverlay.addEventListener('click', () => {
+            modal.style.display = 'none';
+            modalOverlay.style.display = 'none';
+        });
+
+        // Form Validation
+        const form = document.getElementById('user-form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const nameError = document.getElementById('name-error');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+
+        form.addEventListener('submit', (event) => {
+            let isValid = true;
+
+            // Name validation
+            if (nameInput.value.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters long.';
+                isValid = false;
+            } else {
+                nameError.textContent = '';
+            }
+
+            // Email validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = 'Please enter a valid email address.';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            // Password validation
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordPattern.test(passwordInput.value)) {
+                passwordError.textContent = 'Password must be at least 8 characters long, include one uppercase letter and one number.';
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+
+        // Dropdown Menu
+        const dropdown = document.getElementById('dropdown');
+        const dropdownMessage = document.getElementById('dropdown-message');
+
+        dropdown.addEventListener('change', (event) => {
+            if (event.target.value) {
+                dropdownMessage.textContent = `You selected: ${event.target.value}`;
+            } else {
+                dropdownMessage.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
